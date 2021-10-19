@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Chessground as NativeChessground } from 'chessground';
 
 export default class MyChessground extends React.Component {
-  static propTypes = {
+  static types = {
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     fen: PropTypes.string,
@@ -44,7 +44,7 @@ export default class MyChessground extends React.Component {
 
   buildConfigFromProps(props) {
     const config = { events: {} };
-    Object.keys(MyChessground.propTypes).forEach((k) => {
+    Object.keys(MyChessground.types).forEach((k) => {
       const v = props[k];
       if (typeof v !== 'undefined') {
         const match = k.match(/^on([A-Z]\S*)/);
