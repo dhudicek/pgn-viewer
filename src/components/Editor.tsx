@@ -61,7 +61,7 @@ const test2_pgn = [
 
 const initialState = {
   printUrl: false,
-  text: test2_pgn,
+  text: '',
 };
 
 let keyMap = new Map();
@@ -79,13 +79,9 @@ export default class Editor extends React.Component<{}, EditorInterface> {
     super(props);
     this.configureEditorKit();
     this.state = initialState;
-    this.chess = new Chess();
-    if (this.chess.load_pgn(this.state.text)) {
-      console.log('successful load' + this.state.text);
-    } else {
-      console.log('failed load' + this.state.text);
-    }
+
     this.selectVisible = false;
+    this.chess = new Chess();
   }
 
   configureEditorKit = () => {
@@ -96,6 +92,13 @@ export default class Editor extends React.Component<{}, EditorInterface> {
           ...initialState,
           text,
         });
+        if (this.chess.load_pgn(text)) {
+          console.log('successful load' + text);
+        } else {
+          console.log('failed load' + text);
+          this.chess.load_pgn(test2_pgn);
+        }
+        this.saveText(this.chess.pgn());
       },
       clearUndoHistory: () => {},
       getElementsBySelector: () => [],
@@ -188,13 +191,9 @@ export default class Editor extends React.Component<{}, EditorInterface> {
       }
     }
     if (this.chess.move({ from, to, promotion: 'x' })) {
-      // this.fen = this.chess.fen();
-
       this.lastMove = [from, to];
     }
-    this.setState({
-      text: this.chess.pgn(),
-    });
+    this.saveText(this.chess.pgn());
   };
 
   getFen = () => {
@@ -220,6 +219,7 @@ export default class Editor extends React.Component<{}, EditorInterface> {
           fen={this.getFen()}
           onMove={this.onMove}
           style={{ margin: 'auto' }}
+          // pgn={text}
         />
         <p>{text}</p>
         <p>{this.getFen()}</p>

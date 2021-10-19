@@ -31,6 +31,7 @@ export default class MyChessground extends React.Component {
     onSelect: PropTypes.func,
     items: PropTypes.object,
     drawable: PropTypes.object,
+    // pgn: PropTypes.string,
   };
 
   static defaultProps = {
